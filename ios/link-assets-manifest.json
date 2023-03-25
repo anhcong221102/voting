@@ -1,0 +1,77 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/TTCommons-Black.otf",
+      "sha1": "aa618be597934299f0535fa7110d9777e162f051"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-BlackItalic.otf",
+      "sha1": "9ee9309e8a3599773566253927af158f95dbd88d"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-Bold.otf",
+      "sha1": "e32a5618bd2b09d196ad715358a9223538ece4c2"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-BoldItalic.otf",
+      "sha1": "5313caa22c54fd4f42692b530226d3864e3e511e"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-DemiBold.otf",
+      "sha1": "16f2c16156d51cdf85e50ebc7cd69b8a7623cd63"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-DemiBoldItalic.otf",
+      "sha1": "bc72da0776c08986c9e382fb0af2c6e51d1d8f50"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-ExtraBold.otf",
+      "sha1": "eb9ca86df3c8a63e6adb8595ef574583df6da99c"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-ExtraBoldItalic.otf",
+      "sha1": "68381200a6d2872d2a4003b22901541acd43cd3a"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-ExtraLight.otf",
+      "sha1": "cbcebc90a52a57997db56e3712305d4fd46c589b"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-ExtraLightItalic.otf",
+      "sha1": "d02feef533e43a7c33885bee86531a6adba7aae5"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-Italic.otf",
+      "sha1": "781ff848c0414b1bffbe20cea4c048e94f1db934"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-Light.otf",
+      "sha1": "f0e5e39215e39635bcd6bd0b45a49953c3f417a4"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-LightItalic.otf",
+      "sha1": "c2c3e728830e6f1fa294679bff2a0cf83c04c735"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-Medium.otf",
+      "sha1": "367f764d6e65b05f985c904f1c63f6551cf6faf1"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-MediumItalic.otf",
+      "sha1": "b6f5a3083213caddf3d7c3b83c19a4552211a0f8"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-Regular.otf",
+      "sha1": "803b57d242c4e171a88d4d9f6d198d9b625a7779"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-Thin.otf",
+      "sha1": "376c5f752e817fd54d6cc8fc1a2c754e545bd22f"
+    },
+    {
+      "path": "src/assets/fonts/TTCommons-ThinItalic.otf",
+      "sha1": "d6a06d617ff2e417583daf87fed7abdf97e167fc"
+    }
+  ]
+}

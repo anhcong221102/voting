@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">voting</string>
+     <string name="CodePushDeploymentKey" moduleConfig="true"></string>
+</resources>
