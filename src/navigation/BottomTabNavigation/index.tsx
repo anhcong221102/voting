@@ -105,7 +105,7 @@ const style =(theme:any)=> StyleSheet.create({
     width: scale(22),
   },
   inactive: {
-    opacity: 0.5,
+    opacity: 0.3,
     paddingBottom: scale(3),
   },
   labelStyle: {

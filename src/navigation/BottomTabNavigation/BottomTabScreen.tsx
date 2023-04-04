@@ -27,8 +27,8 @@ export const BottomTabScreen = {
       <Image source={images.home}
         style={{
           resizeMode: 'contain',
-          height: scale(22),
-          width: scale(22),
+          height: scale(20),
+          width: scale(20),
         }}
       />
     ),
@@ -62,26 +62,26 @@ export const BottomTabScreen = {
  
   [WRITING]: {
     screen: WritingNavigation,
-    title: 'Đã hoàn thành',
+    title: 'Hoàn thành',
     icons: () => (
       <Image source={images.ic_writing}
         style={{
           resizeMode: 'contain',
-          height: scale(22),
-          width: scale(22),
+          height: scale(20),
+          width: scale(20),
         }}
       />
     ),
   },
   [CREATED]: {
     screen: CreatedScreen,
-    title: 'tạo cuộc họp',
+    title: 'Tạo cuộc họp',
     icons: () => (
       <Image source={images.notify}
         style={{
           resizeMode: 'contain',
-          height: scale(25),
-          width: scale(25),
+          height: scale(20),
+          width: scale(20),
         }}
       />
     ),
