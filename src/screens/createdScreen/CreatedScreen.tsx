@@ -82,10 +82,11 @@ const CreatedScreen = () => {
   const gotoDetail = (item: any) => {
     navigate(MainStackRouter.DETAILNOVEL, { item: item })
   }
-  const [selectedValue, setSelectedValue] = useState(null);
+const  [text,setText]=useState(false);
   const [checkbox,setCheckbox]=useState(false);
   return (
     <Layout bgColor={colors.white} barStyle={'dark-content'}>
+     
    <View style={{
         marginTop: scale(15),
         flexDirection: 'row',
@@ -102,30 +103,18 @@ const CreatedScreen = () => {
         <View style={{ flexDirection: 'row', marginRight: scale(10) }}><Text style={{ marginRight: scale(10) }}>Nguyễn Văn A</Text>
           <Image source={images.img1} style={styles.ImgUser}></Image></View>
       </View>
-     
-      <View><Text style={{fontSize:scale(20),margin:scale(10)}}>Hình thức cuộc họp</Text>
+      <ScrollView 
+              showsVerticalScrollIndicator={false}
+            >     
+      <View><Text style={styles.textTitle}>Hình thức cuộc họp</Text>
       <View style={{flexDirection:'row'}}>
       <View style={{flexDirection:'row'}}>
-        <Button style={{width:scale(20),
-        height:scale(20),
-        borderWidth:1, 
-        marginTop:scale(20),
-        marginLeft:scale(15),
-        borderRadius:scale(10),
-        alignItems:'center',
-        justifyContent:'center'}}
+        <Button style={styles.btnViewPass}
         onPress={()=>setCheckbox(!checkbox)}>{checkbox && <Image source={images.checkbox} style={{width:scale(21),height:scale(21)}}/>}</Button>
           
       <Text style={{marginTop:scale(20)}}>Online</Text></View>
       <View style={{flexDirection:'row'}}>
-        <Button style={{width:scale(20),
-        height:scale(20),
-        borderWidth:1, 
-        marginTop:scale(20),
-        marginLeft:scale(15),
-        borderRadius:scale(10),
-        alignItems:'center',
-        justifyContent:'center'}}
+        <Button style={styles.btnViewPass}
         onPress={()=>setCheckbox(!checkbox)}>{checkbox && <Image source={images.checkbox} style={{width:scale(21),height:scale(21)}}/>}</Button>
           
       <Text style={{marginTop:scale(20)}}>Offline</Text></View>
@@ -133,12 +122,51 @@ const CreatedScreen = () => {
       </View>
       
       </View>
-      <View style={{margin:scale(10)}}><Text style={{fontSize:scale(20),margin:scale(10)}}>Tên cuộc họp</Text>
+      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Tên đại hội:</Text>
       <CInput 
-        placeholder='Tên cuộc họp'
+        placeholder='Tên đại hội'
         valueText={userName}
         onChangeText={(text: string) => { setUserName(text) }}
       />
+      </View>
+      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Tên tiêu đề:</Text>
+      <CInput 
+        placeholder='Tên tiêu đề'
+        valueText={userName}
+        onChangeText={(text: string) => { setUserName(text) }}
+      />
+      </View>
+      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Logo:</Text>
+     <View style={styles.Brow}>
+      <Button style={styles.butt}
+      ><Text>Browse...</Text></Button>
+     </View>
+      </View>
+      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Danh sách cổ đông:</Text>
+     <View style={styles.Brow}>
+      <Button style={styles.butt}
+      ><Text>Browse...</Text></Button>
+     </View>
+      </View>
+      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Mẫu thư mời:</Text>
+     <View style={styles.Brow}>
+      <Button style={styles.butt}
+      ><Text>Browse...</Text></Button>
+     </View>
+      </View>
+      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Quy mô đại hội:</Text>
+     <View style={{ width:'50%',height:scale(50),
+    borderWidth:1,borderRadius:scale(5),
+    borderColor:colors.gray, justifyContent: 'space-between',flexDirection:'row',  alignItems: 'center', }}>
+      <View><Text style={{margin:scale(10)}}>10-50</Text>
+      {text && <Text style={{margin:scale(10)}}>50-100</Text>}
+      </View>
+      <Button
+      onPress={()=>setText(!text)}><Image source={images.ic_down} style={{ width: scale(16),
+    height: scale(16),margin:scale(10),
+    resizeMode: 'contain',
+    tintColor: theme.title,}}></Image></Button>
+     </View>
       </View>
       {/* <View style={{margin:scale(10)}}>
       <DropDownPicker
@@ -172,7 +200,7 @@ const CreatedScreen = () => {
         date={date}
       />
     </View> */}
-
+</ScrollView>
       {isLoading && <Loading />}
 
     </Layout>
@@ -197,16 +225,19 @@ const styles =   StyleSheet.create({
     borderRadius: scale(25),
 
   },
+  Brow:{
+    width:'70%',height:scale(50),
+    borderWidth:1,borderRadius:scale(5),
+    borderColor:colors.gray,justifyContent:'center'
+  },
   butt: {
-    width: scale(70),
-    height: scale(30),
-    borderColor: colors.gray2x,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: scale(20),
-    margin: scale(3),
-    backgroundColor: colors.gray2x,
+    width:scale(70),
+      height:scale(40),
+      borderRadius:scale(5),
+      backgroundColor:colors.nen,
+      alignItems:'center',
+      justifyContent:'center',
+      marginLeft:scale(15)
   },
   line: {
     width: '100%',
@@ -233,10 +264,14 @@ const styles =   StyleSheet.create({
   },
 
   btnViewPass: {
-    position: 'absolute',
-    right: scale(0),
-    bottom: scale(0),
-    padding: scale(15)
+    width:scale(20),
+    height:scale(20),
+    borderWidth:1, 
+    marginTop:scale(20),
+    marginLeft:scale(15),
+    borderRadius:scale(10),
+    alignItems:'center',
+    justifyContent:'center'
   },
   iconViewPass: {
     width: scale(20),
@@ -260,11 +295,7 @@ const styles =   StyleSheet.create({
     fontSize: scale(14)
   },
   textTitle: {
-    flexWrap: 'wrap',
-    width: '75%',
-    fontSize: scale(17),
-    textTransform: 'uppercase',
-    color: colors.textColor,
+    fontSize:scale(20),margin:scale(10)
   },
   textNormal: {
     fontSize: scale(12),
