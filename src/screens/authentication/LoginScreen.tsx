@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useEffect, useContext } from 'react';
-import { View, StyleSheet, Platform, ImageBackground } from 'react-native';
+import { View, StyleSheet, Platform, ImageBackground, ScrollView } from 'react-native';
 import { Layout, Button, Text, Loading, Header, CInput } from 'components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { device, scale } from 'device';
@@ -40,6 +40,12 @@ const LoginScreen = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const { theme } = useContext(ThemeContext);
   const styles = style(theme);
+
+  const A = 'A';
+  const B = 'B';
+  const C = 'C';
+  const [blPage, setblPage] = useState(A);
+
   const optionalConfigObject = {
     // title: 'Authentication Required', // Android
     imageColor: colors.mainColor, // Android
@@ -114,12 +120,128 @@ const LoginScreen = () => {
 
   return (
     <Layout bgColor={theme.type === 'light' ? colors.bgContent : colors.textColor}>
+  
       <KeyboardAwareScrollView
         bounces={false}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flex: 1 }}>
-       <View style={styles.slide}>
-        <Image source={images.back} style={{
+      
+        <View style={{alignItems:'center'}}>
+          <Image source={images.Logo} style={{width:scale(300),height:scale(100),marginTop: blPage===A ? scale(200): scale(100)}}></Image>
+          {blPage===A?<View>
+          <Button style={{marginTop:scale(10),width:scale(150),height:scale(40),backgroundColor:colors.black,alignItems:'center',justifyContent: 'center',borderRadius:scale(5)}}
+          onPress={() => setblPage(B)}
+          ><Text style={{fontSize:scale(20),color:colors.white}}>Đăng nhập</Text></Button>
+          <Button onPress={()=> setblPage(C)} style={{marginTop:scale(10),width:scale(150),height:scale(40),backgroundColor:colors.white,alignItems:'center',justifyContent: 'center',borderRadius:scale(5),borderWidth:1}}
+          ><Text style={{fontSize:scale(20)}}>Đăng ký</Text></Button></View>:null}
+        </View>
+
+      {blPage===B?
+      <View style={{ paddingHorizontal: scale(30), marginTop: scale(50) }}>
+      <CInput
+        placeholder='Địa chỉ Email'
+        valueText={userName}
+        onChangeText={(text: string) => { setUserName(text) }}
+      />
+
+       <View style={{marginTop:scale(15)}}>
+        <CInput
+          placeholder='Mật khẩu'
+          valueText={pass}
+          onChangeText={(text: string) => { setPass(text) }}
+          secureTextEntry={!blSecurity}
+        />
+        {/* <Button onPress={() => setBlSecurity(!blSecurity)} style={styles.btnViewPass}>
+          <Image source={!blSecurity ? images.eyeOff : images.eyeOn} style={styles.iconViewPass} />
+        </Button> */}
+      </View>
+      <View style={styles.btnForgot}>
+        <Button onPress={onForgotPass} >
+          <Text semiBold style={styles.txtForgot}>Quên mật khẩu?</Text>
+        </Button>
+      </View> 
+
+      <View style={{ flexDirection: "row", justifyContent: 'space-between', marginBottom: scale(20) }}>
+        <Button onPress={() => goToHome()} style={[styles.btn]}>
+          <Text bold style={styles.txtBtn}>Đăng nhập</Text>
+        </Button> 
+     
+       
+     </View>
+     <View style={{flexDirection:'row', justifyContent: 'center',marginTop:scale(200)}}>
+      <Text style={{textAlign:'center'}}>Bạn đã có tài khoản chưa? </Text>
+      <Button onPress={()=>setblPage(C)}>
+      <Text bold
+      >Đăng ký</Text></Button>
+     </View>
+    </View> 
+      :null}
+    {blPage===C?
+    <View style={{ paddingHorizontal: scale(30),marginTop:scale(20) }}>
+      <CInput
+        placeholder='Tên'
+        valueText={userName}
+        onChangeText={(text: string) => { setUserName(text) }}
+      />
+      <View style={{marginTop:scale(15)}}>
+      <CInput
+        placeholder='Họ'
+        valueText={userName}
+        onChangeText={(text: string) => { setUserName(text) }}
+      /></View>
+      <View style={{marginTop:scale(15)}}>
+        <CInput
+          placeholder='Mật khẩu'
+          valueText={pass}
+          onChangeText={(text: string) => { setPass(text) }}
+          secureTextEntry={!blSecurity}
+        /></View>
+      <View style={{marginTop:scale(15)}}>
+        <CInput
+          placeholder='Nhập lại mật khẩu'
+          valueText={pass}
+          onChangeText={(text: string) => { setPass(text) }}
+          secureTextEntry={!blSecurity}
+        />
+        {/* <Button onPress={() => setBlSecurity(!blSecurity)} style={styles.btnViewPass}>
+          <Image source={!blSecurity ? images.eyeOff : images.eyeOn} style={styles.iconViewPass} />
+        </Button> */}
+      </View>
+      <View style={styles.btnForgot}>
+        <Button onPress={onForgotPass} >
+          <Text semiBold style={styles.txtForgot}>Quên mật khẩu?</Text>
+        </Button>
+      </View> 
+      <View style={{ flexDirection: "row", justifyContent: 'space-between', marginBottom: scale(20) }}>
+        <Button onPress={() => goToHome()} style={[styles.btn]}>
+          <Text bold style={styles.txtBtn}>Đăng ký</Text>
+        </Button> 
+     
+       
+     </View>
+     <View style={{flexDirection:'row', justifyContent: 'center',marginTop:scale(100)}}>
+      <Text style={{textAlign:'center'}}>Bạn đã có tài khoản? </Text>
+      <Button onPress={()=>setblPage(B)}>
+      <Text bold
+      >Đăng Nhập</Text></Button>
+     </View>
+      
+    </View>:null}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        {/* <View style={styles.slide}>
+        <Image source={images.gmeet} style={{
           width: '100%',
           height: '93%',
           borderBottomLeftRadius: scale(48),
@@ -131,15 +253,15 @@ const LoginScreen = () => {
           width: '100%',
           bottom: scale(15),
           justifyContent: 'center'
-        }}>
-          <Image source={images.ggmeet  } style={styles.logo} />
-          <View style={{ marginTop: scale(15) }}>
+        }}> 
+         <Image source={images.ggmeet  } style={styles.logo} />
+           <View style={{ marginTop: scale(15) }}>
             <Text semiBold style={styles.textNormal}>Giải tỏa tinh thần</Text>
             <Text semiBold style={styles.textNormal}>Thỏa mãn yêu thích</Text>
           </View>
         </View>
-      </View>
-        <View style={{ paddingHorizontal: scale(30), marginTop: scale(15) }}>
+      </View> */}
+        {/* <View style={{ paddingHorizontal: scale(30), marginTop: scale(15) }}>
       
           <CInput
             placeholder='Nhập số điện thoại của bạn'
@@ -151,15 +273,15 @@ const LoginScreen = () => {
           <View style={{ flexDirection: "row", justifyContent: 'space-between', marginBottom: scale(20) }}>
             <Button onPress={() => goToHome()} style={[styles.btn]}>
               <Text bold style={styles.txtBtn}>Đăng nhập</Text>
-            </Button>
-            {/*   <Button onPress={() => {
+            </Button> 
+             <Button onPress={() => {
               doLoginWithBiometry();
             }} style={styles.btnFintger}>
               <IconFintger />
-            </Button> */}
+            </Button>
            
-          </View>
-          {/* <View>
+         </View>
+           <View>
             <CInput
               placeholder='Nhập mật khẩu'
               valueText={pass}
@@ -174,10 +296,10 @@ const LoginScreen = () => {
             <Button onPress={onForgotPass} >
               <Text semiBold style={styles.txtForgot}>Quên mật khẩu?</Text>
             </Button>
-          </View> */}
+          </View> 
 
 
-        </View>
+        </View>  */}
       </KeyboardAwareScrollView>
 
       {isLoading && <Loading />}
@@ -223,9 +345,9 @@ const style = (theme: any) => StyleSheet.create({
   btn: {
     width: '100%',
     height: scale(48),
-    backgroundColor: colors.mainColor,
+    backgroundColor: colors.black,
     marginTop: scale(30),
-    borderRadius: scale(5),
+    borderRadius: scale(15),
     justifyContent: 'center',
     alignItems: 'center'
   },

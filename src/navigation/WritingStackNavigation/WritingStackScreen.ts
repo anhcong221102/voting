@@ -7,5 +7,5 @@ WritingStackNavigation;
 
 export const CheckInStackScreen = {
   [HOME]: { screen: HomeScreen, title: '' },
-  [DETAILNOVEL]: { screen: DetailNovelScreen, title: '' }
+  [DETAILNOVEL]: { screen: DetailNovelScreen, title: '' },
 }

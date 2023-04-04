@@ -12,17 +12,17 @@ import ProfileNavigation from 'navigation/ProfileStackNavigation';
 import WritingNavigation from 'navigation/WritingStackNavigation';
 import React from 'react';
 import { Image } from 'react-native-elements';
-import { HomeScreen, LibraryScreen, SearchScreen } from 'screens';
+import {  HomeScreen, LibraryScreen, SearchScreen, CreatedScreen} from 'screens';
 //import CheckInScreen from 'screens/checkin/CheckinScreen';
 
 import BottomTabRouter from './BottomTabRouter';
 
-const { HOME, SEARCH, LIBRARY, NOTIFICATION, WRITING } = BottomTabRouter;
+const { HOME, SEARCH, LIBRARY, CREATED, WRITING } = BottomTabRouter;
 
 export const BottomTabScreen = {
   [HOME]: {
     screen: HomeScreen,
-    title: 'Trang chủ',
+    title: 'Đang chờ',
     icons: () => (
       <Image source={images.home}
         style={{
@@ -35,7 +35,7 @@ export const BottomTabScreen = {
   },
   [SEARCH]: {
     screen: SearchScreen,
-    title: 'Tìm kiếm',
+    title: 'Đã duyệt',
     icons: () => (
       <Image source={images.ic_search}
         style={{
@@ -48,7 +48,7 @@ export const BottomTabScreen = {
   },
   [LIBRARY]: {
     screen: LibraryScreen,
-    title: 'Thư viện',
+    title: 'Đang live',
     icons: () => (
       <Image source={images.library}
         style={{
@@ -62,7 +62,7 @@ export const BottomTabScreen = {
  
   [WRITING]: {
     screen: WritingNavigation,
-    title: 'Thêm truyện',
+    title: 'Đã hoàn thành',
     icons: () => (
       <Image source={images.ic_writing}
         style={{
@@ -73,9 +73,9 @@ export const BottomTabScreen = {
       />
     ),
   },
-  [NOTIFICATION]: {
-    screen: ProfileNavigation,
-    title: 'Thông báo',
+  [CREATED]: {
+    screen: CreatedScreen,
+    title: 'tạo cuộc họp',
     icons: () => (
       <Image source={images.notify}
         style={{

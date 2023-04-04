@@ -1,5 +1,6 @@
 const CheckinStackRouter = {
   HOME: 'HOME',
-  DETAILNOVEL:'DETAILNOVEL'
+  DETAILNOVEL:'DETAILNOVEL',
+  EDIT:'EDIT',
 };
 export default CheckinStackRouter;

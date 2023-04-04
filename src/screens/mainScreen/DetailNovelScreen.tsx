@@ -1,282 +1,151 @@
-import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import Layout from 'components/CLayout/Layout';
-import { Button, CCarouselVer, Text } from 'components';
-import { Alert, ScrollView, StyleSheet, View, FlatList, Animated, StatusBar, LayoutAnimation, Modal, TouchableWithoutFeedback } from 'react-native';
-import { device, scale } from 'device';
-import { colors, fonts, images } from 'assets';
-
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'redux_manager/base/allReducers';
-import { network } from 'services';
-import { Config } from 'utils';
-import { TextInputMask } from 'react-native-masked-text'
-import moment from 'moment';
-
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { allActions } from 'redux_manager';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, StyleSheet, Platform, ImageBackground, ScrollView } from 'react-native';
+import { Layout, Button, Text, Loading, Header, CInput } from 'components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import CListView from 'components/CListView/CListView';
-
-import config from 'utils/config';
+import { device, scale } from 'device';
+import { colors, fonts, IconFintger, images } from 'assets';
+import { useDispatch, useSelector } from 'react-redux';
+import AuthenticationRouter from 'navigation/AuthenticationNavigation/AuthenticationRouter';
+import { goBack, navigate } from 'navigation/RootNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ItemChap from './ItemChap';
-import Toast from 'react-native-toast-message';
-import { Image } from 'react-native-elements';
-import { goBack } from 'navigation/RootNavigation';
-import { ThemeContext } from 'assets/theme/ThemeContext';
-import Theme from 'assets/theme/Theme';
+import {
+  loginAction,
+  onCloseModalAuthenticationMessage,
+  changeBiometryType,
+  changeIsSupport,
+} from 'redux_manager/authentication/authenticationReducer';
+import TouchID from 'react-native-touch-id';
+import Modal from 'react-native-modal';
+
+import { useNavigation, CommonActions } from '@react-navigation/native';
+import { allActions } from 'redux_manager';
+import { Config } from 'utils';
+import { getErrors } from 'utils/config';
+import { CheckBox, Image } from 'react-native-elements';
+import MainStackRouter from 'navigation/MainStackNavigation/MainStackRouter';
+import { ThemeContext } from "assets/theme/ThemeContext";
+import DropDownPicker from 'react-native-dropdown-picker';
 
 interface Props {
   route: any;
 }
 function DetailNovelScreen({ route }: Props) {
   const [isLoading, setLoading] = useState(false);
-  const { navigate } = useNavigation();
-  const token = useSelector((state: RootState) => state.authentication.token);
-  const profile = useSelector((state: RootState) => state.authentication.user);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [data, setData] = useState(route?.params?.item?.listChapter);
-  const [name, setName] = useState('');
-  const [stepTimeLine, setStepTimeLine] = useState<number>(1);
-  const scrollViewRef = useRef<any>(null);
-  const [blHeader, setblHeader] = useState(false);
-  const [blShowChap, setBlShowChap] = useState(false);
-  const { theme, onChangeTheme } = useContext(ThemeContext);
-  const [sizeFonts, setSizeFont] = useState<number>(22);
-  const [blSize, showSizeFonts] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [pass, setPass] = useState('');
+  const [pinCode, setPinCode] = useState('');
+  const isSupport = useSelector((state: any) => state.authentication.isSupport);
+  const biometryType = useSelector((state: any) => state.authentication.biometryType);
+  const [blSecurity, setBlSecurity] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const { theme } = useContext(ThemeContext);
   const styles = style(theme);
-  useEffect(() => {
-
-  }, []);
-
-
-
-  const onNext = (index: number) => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current?.scrollTo({
-        animated: true,
-        x: stepTimeLine * device.w,
-      });
-
-    }
-    console.log(data?.length)
-    if (index == data?.length - 1) {
-      Toast.show({
-        text1: 'Thông báo',
-        text2: 'Bạn đang ở cuối truyện',
-      });
-    }
-  };
-  const onPre = (index: number) => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({
-        x: stepTimeLine ? (stepTimeLine - 2) * device.w : device.w,
-        animated: true,
-      })
-    };
-
-    if (index == 0) {
-      Toast.show({
-        text1: 'Thông báo',
-        text2: 'Bạn đang ở đầu truyện',
-      });
-    }
-
-  };
-
-  const scrollY = new Animated.Value(0);
-  const diffClamp = Animated.diffClamp(scrollY, 0, 56);
-  const translateY = diffClamp.interpolate({
-    inputRange: [0, 56],
-    outputRange: [0, -56]
-  });
-  const handleOnScroll = (e: any) => {
-    const offset = Math.round(e.nativeEvent.contentOffset.x / device.w) + 1;
-    if (offset != stepTimeLine) {
-      setStepTimeLine(offset);
-    }
-  };
-  const setblHeadershow = () => {
-    setblHeader(!blHeader);
-
+  const onForgotPass = () => {
+    navigate(AuthenticationRouter.FORGOTPASS, {})
   }
+  const A = 'A';
+  const B = 'B';
+  const C = 'C';
+  const [blPage, setblPage] = useState(A);
 
 
-  const onToggleTheme = async () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    onChangeTheme();
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+
+  const handleCheckBox = () => {
+    setIsChecked(!isChecked);
   };
 
-  const onChangeFonts = async (index: number) => {
-    const size = sizeFonts + index;
-    if (size >= 30 && index == 1) {
-      setSizeFont(30);
+
+
+  const doLoginWithBiometry = (res?: string | boolean) => {
+    try {
+      TouchID.authenticate(
+        `Sử dụng Vân tay/Khuôn mặt để mở khoá ứng dụng`
+        ,
+        {
+          
+          title: `Đăng nhập TruyenFree`
+          ,
+          sensorErrorDescription: 'Thất bại', // Android
+          cancelText: 'Huỷ', // Android
+        },
+      )
+        .then(async (result: any) => {
+          if (result) {
+            goToHome();
+           /*  const account = await getAccount();
+            if (account) {
+              setUserName(account.username);
+              setPass(account.password);
+              goToHome(); 
+            }
+          */}
+        })
+        .catch((err: any) => { });
       return;
-    }
-    else if (size <= 14 && index == -1) {
-      setSizeFont(14);
-      return;
-    }
-    else {
-      setSizeFont(size)
-    }
-  }
-  const onChangeChap = (index: number) => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({
-        x: index * device.w,
-        animated: true,
-      })
-    };
-    setStepTimeLine(index + 1);
-    setBlShowChap(false)
-  }
+    } catch (error: any) { }
+  };
+  const goToHome = () => {
+    console.log('có vào đây');
+    navigation.dispatch(
+      CommonActions.reset({ routes: [{ name: 'MainStack' }] }),
+    );
+    /*  dispatch(
+       loginAction({ userName: userName, pass: pass }),
+     ); */
+  };
+
   return (
     <Layout bgColor={theme.type === 'light' ? colors.bgContent : colors.textColor}>
-      {blHeader &&
-        <Animated.View
-          style={[{
-            transform: [{ translateY: translateY }]
-          }, styles.containerHeaderModal]}>
-          <Button onPress={goBack} style={{ width: '10%' }} >
-            <Image source={images.ic_back}
-              style={styles.iconback} />
+       <View style={{
+        marginTop: scale(15),
+        flexDirection: 'row',
+        alignItems: 'center', 
+        justifyContent: 'space-between',
+        borderBottomColor: colors.line,
+        borderBottomWidth: scale(1),
+        paddingBottom: scale(15),
+        backgroundColor: colors.white,
+        margin:scale(5)
+      }}>
+        <Button onPress={goBack} style={{ width: '10%' }}><Image source={images.ic_back} style={{    width: scale(16),
+    height: scale(16),
+    resizeMode: 'contain',
+    tintColor: theme.title,}}/></Button>
+        <Image source={images.Logo} style={{ width: scale(130), height: scale(40) }}></Image>
 
-          </Button>
-          <Button onPress={() => setBlShowChap(true)} style={styles.btnModalChap}>
-            <Text style={styles.titleNormal} numberOfLines={2}>{data[stepTimeLine - 1].title}</Text>
-            <Image source={images.ic_down}
-              style={styles.icondown} />
-          </Button>
-          <View style={styles.headerRight}>
-            <Button onPress={() => onToggleTheme()} style={styles.btnRightIcon}>
-              <Image source={theme.type == 'light' ? images.sun : images.moon}
-                style={styles.iconChangetheme} />
-            </Button>
-            <Button onPress={() => showSizeFonts(true)} style={styles.btnRightIcon}>
-              <Text semiBold style={styles.title}>Aa</Text>
-            </Button>
-          </View>
-        </Animated.View>}
-      <ScrollView
-        ref={scrollViewRef}
-        horizontal
-        automaticallyAdjustContentInsets={false}
-        scrollEnabled={true}
-        snapToInterval={device.w}
-        onScroll={(e) => handleOnScroll(e)}
-        scrollEventThrottle={16}
-        showsHorizontalScrollIndicator={false}
-
-      >
-        {data?.map((item: any, index: number) => {
-          return (
-            <ScrollView showsVerticalScrollIndicator={false}
-              key={index}
-              style={{
-                marginTop: blHeader == true ? scale(66) : 0,
-                marginBottom: scale(60)
-              }}
-              onScroll={(e) => {
-                scrollY.setValue(e.nativeEvent.contentOffset.y);
-                setblHeader(false);
-              }
-              }
-              scrollEventThrottle={16}
-            >
-              <Button onPress={() => setblHeadershow()}>
-                <ItemChap index={index} data={item} theme={theme} sizeFonts={sizeFonts} />
-              </Button>
-            </ScrollView>
-          );
-        })}
-      </ScrollView>
-      <View style={styles.btn}>
-        <Button onPress={() => { onPre(stepTimeLine) }} style={styles.btnContent}>
-          <Text semiBold
-            style={styles.txt}>Chương trước</Text>
-        </Button>
-        <Button onPress={() => { onNext(stepTimeLine) }} style={[styles.btnContent,{backgroundColor:colors.mainColor}]}>
-          <Text semiBold style={[styles.txt, { color: colors.white }]}>Chương tiếp</Text>
-        </Button>
+        <View style={{ flexDirection: 'row', marginRight: scale(10) }}><Text style={{ marginRight: scale(10) }}>Nguyễn Văn A</Text>
+          <Image source={images.img1} style={styles.ImgUser}></Image></View>
       </View>
-      <Modal animationType="slide"
-        transparent={true}
-        visible={blSize}
+      <View style={{ paddingHorizontal: scale(30), marginTop: scale(50) }}>
+      <CInput
+        placeholder='Tên cuộc họp'
+        valueText={userName}
+        onChangeText={(text: string) => { setUserName(text) }}
+      />
 
-      >
-
-        <TouchableWithoutFeedback
-          onPress={() => showSizeFonts(false)}
-        >
-          <View style={styles.modal1}>
-            <View
-              style={styles.containerModal1}
-            >
-              <View style={styles.row}>
-                <Text semiBold style={styles.txt}>Kích thước Phông chữ</Text>
-
-              </View>
-              <View
-                style={styles.btnModal1}>
-                <Button style={styles.btnmodal1}
-                  onPress={() => onChangeFonts(-1)}>
-                  <Text style={styles.txt}>Aa-</Text>
-                </Button>
-                <View style={styles.btnmodal1}
-                >
-                  <Text semiBold style={styles.txt}>{sizeFonts}</Text>
-                </View>
-                <Button style={styles.btnmodal1}
-                  onPress={() => onChangeFonts(1)}>
-                  <Text style={styles.txt}>Aa+</Text>
-                </Button>
-              </View>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-      <Modal animationType="slide"
-        transparent={true}
-        visible={blShowChap}
-      >
-        <TouchableWithoutFeedback
-          onPress={() => setBlShowChap(false)}
-        >
-          <View style={styles.modal2}>
-            <View
-              style={styles.containerModal2}
-            >
-              <View style={styles.row}>
-                <Text semiBold style={styles.titleModal2}>THOÁT XÁC LỠ NGÃ VÀO LÒNG ANH</Text>
-
-              </View>
-              <ScrollView style={styles.scrollModal2}
-                showsVerticalScrollIndicator={false}
-              >
-                {data?.map((item: any, index: number) => {
-                  return (
-                    <Button key={index}
-                      style={styles.btnModal2}
-                      onPress={() => { onChangeChap(index) }}>
-                      {stepTimeLine - 1 == index ? <Text
-                        semiBold
-                        style={styles.txtModal}>{item?.title}</Text> : <Text
-                          style={styles.txt}>{item?.title}</Text>}
-                    </Button>
-
-                  );
-                })}
-              </ScrollView>
-            </View>
-
-          </View>
-        </TouchableWithoutFeedback>
-
-
-      </Modal>
+       <View style={{marginTop:scale(15)}}>
+       <CInput
+        placeholder='Tên cuộc họp'
+        valueText={userName}
+        onChangeText={(text: string) => { setUserName(text) }}
+      />
+      </View>
+      <View style={{flexDirection:'row',marginTop:scale(20)}}>
+      
+      <Text style={{fontSize:scale(20)}}>{isChecked ? 'Thanh toán' : 'chưa thanh toán'}</Text>
+      <CheckBox onPress={()=> setIsChecked(true)}/>
+    </View>
+      <View style={{margin:scale(50),marginTop:scale(200)  }}>
+            <Button onPress={() => goToHome()} style={styles.btn}>
+              <Text bold style={styles.txtBtn}>Đăng nhập</Text>
+            </Button> 
+         </View>
+     </View>
+    
+ 
     </Layout>
   );
 }
@@ -297,12 +166,48 @@ const style = (theme: any) => StyleSheet.create({
     paddingLeft: scale(15),
     justifyContent: 'space-between'
   },
-  iconback: {
-    width: scale(16),
-    height: scale(16),
-    resizeMode: 'contain',
-    tintColor: theme.title,
+  btnFintger: {
+    borderWidth: scale(1),
+    borderColor: colors.gray2x,
+    borderRadius: scale(10),
+    height: scale(48),
+    width: scale(48),
+    marginTop: scale(25),
+    justifyContent: 'center',
+    alignItems: 'center'
   },
+  ImgUser: {
+    height: scale(30),
+    width: scale(30),
+    borderRadius: scale(25),
+
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+  },
+  txtBtn: {
+    color: colors.white,
+    fontSize: scale(18)
+  },
+  btn: {
+    height:scale(40),
+    width:scale(200),
+    justifyContent: 'center',
+    backgroundColor:colors.black,
+    borderRadius:scale(5),
+    alignItems: 'center',
+  },
+  txtForgot: {
+    fontSize: scale(14)
+  },
+  btnForgot: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: scale(10)
+  },
+
   icondown: {
     width: scale(10),
     height: scale(10),
@@ -418,15 +323,7 @@ const style = (theme: any) => StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center'
   },
-  btn: {
-    position: 'absolute',
-    backgroundColor: colors.gray2x,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: scale(25),
-    width: '100%',
-    bottom: 0
-  },
+
   btnContent: {
     width: '50%',
     height: scale(48),

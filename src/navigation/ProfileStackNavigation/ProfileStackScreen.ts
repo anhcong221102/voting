@@ -1,11 +1,13 @@
 
 import ProfileStackNavigation from './ProfileStackRouter';
-import { DetailNovelScreen, HomeScreen } from 'screens';
+import { DetailNovelScreen, HomeScreen, } from 'screens';
 
-const { HOME, DETAILNOVEL } =
+const { HOME, DETAILNOVEL, } =
 ProfileStackNavigation;
 
 export const CheckInStackScreen = {
   [HOME]: { screen: HomeScreen, title: '' },
-  [DETAILNOVEL]: { screen: DetailNovelScreen, title: '' }
+  [DETAILNOVEL]: { screen: DetailNovelScreen, title: '' },
+
+
 }

@@ -25,7 +25,11 @@ import { ThemeContext } from 'assets/theme/ThemeContext';
 import { colorsDark } from 'react-native-elements/dist/config';
 import { ListNovel } from '../mainScreen/data/data';
 import MainStackRouter from 'navigation/MainStackNavigation/MainStackRouter';
-const SearchScreen = () => {
+import DatePicker from 'react-native-datepicker';
+
+import DropDownPicker from 'react-native-dropdown-picker';
+import { ScreenContainer } from 'react-native-screens';
+const CreatedScreen = () => {
   const { isLoading, message, isError } = useSelector(
     (state: RootState) => state.authentication,
   );
@@ -54,8 +58,16 @@ const SearchScreen = () => {
   }, []);
 
   const { theme } = useContext(ThemeContext);
+  const [isChecked, setIsChecked] = useState(false);
 
+  const handleCheck = () => {
+    setIsChecked(!isChecked);
+  };
+  const [date, setDate] = useState(new Date());
 
+  const handleDateChange = (newDate: Date) => {
+    setDate(newDate);
+  };
 
   const onForgotPass = () => {
     navigate(AuthenticationRouter.FORGOTPASS, {})
@@ -70,114 +82,96 @@ const SearchScreen = () => {
   const gotoDetail = (item: any) => {
     navigate(MainStackRouter.DETAILNOVEL, { item: item })
   }
-
+  const [selectedValue, setSelectedValue] = useState(null);
+  const [checkbox,setCheckbox]=useState(false);
   return (
     <Layout bgColor={colors.white} barStyle={'dark-content'}>
-
-      <View style={{ width: '100%' }}>
-
-        <Text bold style={{ marginLeft: scale(15), marginTop: scale(15), fontSize: scale(25), color: theme.title }} >Tìm Kiếm</Text>
-        <Caarousel data={ListNovel} gotoDetail={gotoDetail} />
-
-        <View style={{
-          height: scale(40),
-          borderWidth: scale(1),
-          margin: scale(15),
-          borderRadius: scale(20),
-          flexDirection: 'row',
-          alignItems: 'center',
-          borderColor: '#CCCCCC',
-          justifyContent: 'space-between',
-          marginRight: blViewSearch ? scale(60) : scale(15),
-          backgroundColor:colors.white
-        }}>
-          <Image source={images.search}
-            style={{ width: scale(20), height: scale(20), marginLeft: scale(15) }} />
-
-          <CInput
-            placeholder='Tìm kiếm truyện'
-            valueText={userName}
-            containerStyle={{ borderWidth: 0, height: scale(35), marginRight: scale(6), borderRadius: scale(20) }}
-            onChangeText={(text: string) => { setUserName(text) }}
-            style={{
-              width: '90%'
-            }}
-            onFocus={() => setBlViewSearch(true)}
-            onBlur={() => setBlViewSearch(false)}
-          />
-          <Button onPress={() => setBlViewSearch(false)}
-          >
-            <Text bold style={{ marginLeft: scale(15), fontSize: scale(18),color: theme.title }}>Hủy</Text></Button>
-        </View>
-      </View>
-
-      <View style={{
-        flexDirection: 'row', marginLeft: scale(10), display: blViewSearch ? 'flex' : 'none'
+   <View style={{
+        marginTop: scale(15),
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderBottomColor: colors.line,
+        borderBottomWidth: scale(1),
+        paddingBottom: scale(15),
+        backgroundColor: colors.white
       }}>
-        <Button style={styles.butt}>
-          <Text style={{ fontSize: scale(17) }}>Tiêu đề</Text></Button>
-        <Button style={styles.butt}>
-          <Text style={{ fontSize: scale(17) }}>Tag</Text></Button>
-        <Button style={styles.butt}>
-          <Text style={{ fontSize: scale(17) }}>Hồ sơ</Text></Button>
+     
+        <Image source={images.Logo} style={{ width: scale(130), height: scale(40) }}></Image>
+
+        <View style={{ flexDirection: 'row', marginRight: scale(10) }}><Text style={{ marginRight: scale(10) }}>Nguyễn Văn A</Text>
+          <Image source={images.img1} style={styles.ImgUser}></Image></View>
       </View>
-      <View style={styles.line}></View>
-      {!blViewSearch &&
-        <KeyboardAwareScrollView
-          bounces={false}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flex: 1 }}>
+     
+      <View><Text style={{fontSize:scale(20),margin:scale(10)}}>Hình thức cuộc họp</Text>
+      <View style={{flexDirection:'row'}}>
+      <View style={{flexDirection:'row'}}>
+        <Button style={{width:scale(20),
+        height:scale(20),
+        borderWidth:1, 
+        marginTop:scale(20),
+        marginLeft:scale(15),
+        borderRadius:scale(10),
+        alignItems:'center',
+        justifyContent:'center'}}
+        onPress={()=>setCheckbox(!checkbox)}>{checkbox && <Image source={images.checkbox} style={{width:scale(21),height:scale(21)}}/>}</Button>
+          
+      <Text style={{marginTop:scale(20)}}>Online</Text></View>
+      <View style={{flexDirection:'row'}}>
+        <Button style={{width:scale(20),
+        height:scale(20),
+        borderWidth:1, 
+        marginTop:scale(20),
+        marginLeft:scale(15),
+        borderRadius:scale(10),
+        alignItems:'center',
+        justifyContent:'center'}}
+        onPress={()=>setCheckbox(!checkbox)}>{checkbox && <Image source={images.checkbox} style={{width:scale(21),height:scale(21)}}/>}</Button>
+          
+      <Text style={{marginTop:scale(20)}}>Offline</Text></View>
+     
+      </View>
+      
+      </View>
+      <View style={{margin:scale(10)}}><Text style={{fontSize:scale(20),margin:scale(10)}}>Tên cuộc họp</Text>
+      <CInput 
+        placeholder='Tên cuộc họp'
+        valueText={userName}
+        onChangeText={(text: string) => { setUserName(text) }}
+      />
+      </View>
+      {/* <View style={{margin:scale(10)}}>
+      <DropDownPicker
+        items={[
+          {label: 'Item 1', value: 'item1'},
+          {label: 'Item 2', value: 'item2'},
+          {label: 'Item 3', value: 'item3'},
+        ]}
+        defaultValue={selectedValue}
 
-
-          <View>
-            <Text bold style={{ marginTop: scale(20), marginLeft: scale(15), fontSize: scale(25),color: theme.title }}>Khám phá các tag</Text>
-            <ScrollView style={{ marginTop: scale(10) }}
-              showsVerticalScrollIndicator={false}
-            >
-              <View style={{ margin: scale(10), flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-
-                {data?.map((item: any, index: number) => {
-                  return (
-                    <Button key={index}
-                      style={{
-                        height: scale(70),
-                        width: '48%',
-                        borderBottomColor: colors.mainColor,
-                        backgroundColor: colors.bgContent,
-                        borderRadius: 10,
-                        flexDirection: 'row',
-                        marginTop: scale(10),
-                        alignItems: 'center',
-                        elevation: scale(5)
-                      }}>
-                      <Text bold style={{
-                        fontSize: scale(16), width: '60%', alignItems: 'flex-start',
-                        justifyContent: 'center', paddingLeft: 8,
-                      }}>{item?.title}</Text>
-                      <View style={{}}>
-                        <Image
-                          source={item?.img}
-                          style={styles.logo} />
-
-                      </View>
-
-                    </Button>
-
-                  );
-                })}
-
-
-
-              </View>
-
-
-            </ScrollView>
-          </View>
-        </KeyboardAwareScrollView>
-
-      }
-
-
+        style={{backgroundColor: '#fafafa'}}
+        itemStyle={{
+          justifyContent: 'flex-start'
+        }}
+        dropDownStyle={{backgroundColor: '#fafafa'}}
+        onChangeItem={item => setSelectedValue(item.value)}
+      />
+    </View> */}
+      {/* <DropDownPicker
+     items={[        
+      {label: 'Apple', value: 'apple'},        
+      {label: 'Banana', value: 'banana'},        
+      {label: 'Orange', value: 'orange'},    ]}
+    defaultValue={selectedValue}
+    containerStyle={{height: 40}}
+    onChangeItem={item => setSelectedValue(item.value)}
+/> */}
+       {/* <View>
+      <Text style={{fontSize:scale(17)}}>Thời gian diễn ra:</Text>
+      <DatePicker 
+        date={date}
+      />
+    </View> */}
 
       {isLoading && <Loading />}
 
@@ -196,6 +190,12 @@ const styles =   StyleSheet.create({
     paddingHorizontal: scale(8),
     borderRadius: scale(10),
     marginBottom: scale(5)
+  },
+  ImgUser: {
+    height: scale(30),
+    width: scale(30),
+    borderRadius: scale(25),
+
   },
   butt: {
     width: scale(70),
@@ -273,4 +273,4 @@ const styles =   StyleSheet.create({
   }
 });
 
-export default SearchScreen;
+export default CreatedScreen;

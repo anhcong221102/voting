@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Layout from 'components/CLayout/Layout';
 import { Button, CButton, Col, Header, Row, Text } from 'components';
-import { Alert, ScrollView, StyleSheet, View, Image, LayoutAnimation, StatusBar } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View, Image, LayoutAnimation, StatusBar, Linking } from 'react-native';
 import { device, scale } from 'device';
 import { colors, fonts } from 'assets';
-
+import Theme from 'assets/theme/Theme';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux_manager/base/allReducers';
@@ -19,9 +19,14 @@ import AuthenticationRouter from 'navigation/AuthenticationNavigation/Authentica
 import { ListNovel } from './data/data';
 import NovelItem from './components/NovelItem';
 import { Caarousel } from './components/Caarousel';
+
 import { ThemeContext } from 'assets/theme/ThemeContext';
 import MainStackRouter from 'navigation/MainStackNavigation/MainStackRouter';
 import { images } from '../../assets';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { JumpingTransition } from 'react-native-reanimated';
+import { createStackNavigator } from '@react-navigation/stack';
+import DetailNovelScreen from './DetailNovelScreen';
 function HomeScreen() {
   const [isLoading, setLoading] = useState(false);
   const navigation = useNavigation();
@@ -30,6 +35,23 @@ function HomeScreen() {
   const [data, setData] = useState([]);
   const isRefresh = useRef<boolean>(false);
   const { theme } = useContext(ThemeContext);
+
+  const [blBut, setblBut] = useState(false);
+  const TikTok = async () => {
+
+    Linking.openURL('https://www.tiktok.com/@payxabengg');
+
+  };
+
+
+  const A = 'A';
+  const B = 'B';
+  const C = 'C';
+  const D = 'D';
+  const E = 'E';
+  const [blPage, setblPage] = useState(A);
+  const [QR, setQR] = useState(false);
+
 
   const styles = style(theme);
   useEffect(() => {
@@ -42,8 +64,23 @@ function HomeScreen() {
     }
   }, [data]);
 
+  const [hop, setHop] = useState<any>([  
+    { id: 0, title: 'Cuộc họp 1', text:'Đã thanh toán',time:'10am, 30may' },
+    { id: 1, title: 'Cuộc họp 2', text:'Chưa thanh toán',time:'10am, 30may' },
+    { id: 1, title: 'Cuộc họp 3', text:'Chưa thanh toán',time:'10am, 30may' },
+    { id: 0, title: 'Cuộc họp 4', text:'Đã thanh toán' ,time:'10am, 30may'},
+  ])
+  
+  useEffect(() => {
+   
+  }, []); 
+
+  const Stack = createStackNavigator();
+  const [showButton, setShowButton] = useState(false);
+
+
   const gotoDetail = (item: any) => {
-    navigate(MainStackRouter.ABOUTMORE, { item: item })
+    navigate(MainStackRouter.DETAILNOVEL, { item: item })
   }
   const _renderEmpty = () => {
     return <View style={styles.noDataContainer}>
@@ -53,7 +90,7 @@ function HomeScreen() {
 
   return (
     <Layout>
-      <View style={{ 
+      <View style={{
         marginTop: scale(15),
         flexDirection: 'row',
         alignItems: 'center',
@@ -61,158 +98,91 @@ function HomeScreen() {
         borderBottomColor: colors.line,
         borderBottomWidth: scale(1),
         paddingBottom: scale(15),
-        backgroundColor: colors.white}}>
-          <Button style={styles.btnRightIcon}>
-                <Image source={images.ic_back}
-                    style={styles.iconChangetheme} />
-            </Button>
-            <Text bold style={styles.title}>Danh sách</Text>
-           
-           <Button style={styles.btnRightIcon}>
-                <Image source={images.store}
-                    style={styles.icstore} />
-            </Button>
-        </View>
-      
-      <ScrollView style={{ marginBottom: scale(20) }}>
-        <View style={styles.containerTitle}>
-          <Text bold style={styles.title}>Truyện đã hoàn thành</Text>
-          <Text style={{ color: colors.mainColor }}>Đọc say sưa không lo ngắt quãng</Text>
-        </View>
-        <Caarousel data={ListNovel} gotoDetail={gotoDetail} />
+        backgroundColor: colors.white
+      }}>
+     
+        <Image source={images.Logo} style={{ width: scale(130), height: scale(40) }}></Image>
 
+        <View style={{ flexDirection: 'row', marginRight: scale(10) }}><Text style={{ marginRight: scale(10) }}>Nguyễn Văn A</Text>
+          <Image source={images.img1} style={styles.ImgUser}></Image></View>
+      </View>
+     
+      {/* {!QR &&
+         <KeyboardAwareScrollView
+         bounces={false}
+         showsVerticalScrollIndicator={false}
+         contentContainerStyle={{ flex: 1 }}> */}
+          <ScrollView 
+              showsVerticalScrollIndicator={false}
+            >     
+                  <View>
+          {hop?.map((item: any, index: number) => {
+                return (
+      <Button key={index} onPress={() => setblBut(!blBut)}>
         <View>
-          <View style={styles.containerTitle}>
-            <Text bold style={styles.title}>Truyện hay nhất đề xuất cho Bạn</Text>
-            <Text style={{ color: colors.mainColor }}>Được quan tâm và đọc nhiều nhất</Text>
-          </View>
-          <ScrollView horizontal
-            style={{
-              marginHorizontal: scale(20)
-            }}
-          >
-            {ListNovel?.map((item: any, index: number) => {
-              return (
-                <Button
-                  style={{
-                    marginTop: scale(30),
-
-                  }}
-                >
-                  <Image source={item.avatar}
-                    style={{
-                      width: scale(110),
-                      height: scale(160),
-                      position: 'absolute',
-                      zIndex: 10000,
-                      top: scale(-20),
-                      borderRadius: scale(5),
-                    }} />
-                  <View style={{
-                    backgroundColor: colors.bgContent,
-                    height: scale(160),
-                    width: device.w - scale(80),
-                    marginRight: scale(10),
-                    borderRadius: scale(5),
-                    paddingLeft: scale(110),
-                    paddingTop: scale(8)
-                  }}>
-                    <View style={styles.containerText}>
-                      <Text bold numberOfLines={1} style={styles.textNormal}>{item?.title}</Text>
-                      <Text style={styles.textNormal}>Tác giả: <Text semiBold style={styles.textNormal}>{item?.author}</Text></Text>
-                      <Text numberOfLines={1} style={styles.textNormal}>Thể loại: <Text semiBold style={styles.textNormal}>{item?.type}</Text></Text>
-                      <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center', 
-                        justifyContent: 'space-between',
-                        paddingRight: scale(5)
-                      }}>
-                        <Text semiBold numberOfLines={1} >{item?.numberChapter} chương</Text>
-                        <View style={{
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          paddingHorizontal: scale(8),
-                          backgroundColor: colors.mainColor,
-                          borderRadius: scale(20),
-                          paddingVertical: scale(2),
-                          marginVertical: scale(5)
-                        }}>
-                          <Text semiBold numberOfLines={1} style={{ fontSize: scale(11), color: colors.white }}>Hoàn thành</Text>
-                        </View>
-                      </View>
-                      <Text numberOfLines={2} style={styles.textNormal}>{item?.introduce}</Text>
-                    </View>
-
-                  </View>
-                </Button>
-              );
-            })}
-          </ScrollView>
-        </View>
-        <View>
-          <View style={styles.containerTitle}>
-            <Text bold style={styles.title}>Truyện mới cập nhật</Text>
-            <Text style={{ color: colors.mainColor }}>Tham khảo các mẫu truyện hay hơn</Text>
-          </View>
-          {ListNovel?.map((item: any, index: number) => {
-            return (
-              <Button
-                style={{
-                  marginTop: scale(30),
-                  marginHorizontal: scale(20)
-                }}
-              >
-                <Image source={item.avatar}
-                  style={{
-                    width: scale(110),
-                    height: scale(160),
-                    position: 'absolute',
-                    zIndex: 10000,
-                    top: scale(-20),
-                    borderRadius: scale(5),
-                  }} />
-                <View style={{
-                  backgroundColor: colors.bgContent,
-                  height: scale(160),
-                  width: device.w - scale(40),
-                  marginRight: scale(10),
-                  borderRadius: scale(5),
-                  paddingLeft: scale(110),
-                  paddingTop: scale(8)
-                }}>
-                  <View style={styles.containerText}>
-                    <Text bold numberOfLines={1} style={styles.textNormal}>{item?.title}</Text>
-                    <Text style={styles.textNormal}>Tác giả: <Text semiBold style={styles.textNormal}>{item?.author}</Text></Text>
-                    <Text numberOfLines={1} style={styles.textNormal}>Thể loại: <Text semiBold style={styles.textNormal}>{item?.type}</Text></Text>
-                    <View style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      paddingRight: scale(5)
-                    }}>
-                      <Text semiBold numberOfLines={1} >{item?.numberChapter} chương</Text>
-                      <View style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        paddingHorizontal: scale(8),
-                        backgroundColor: colors.mainColor,
-                        borderRadius: scale(20),
-                        paddingVertical: scale(2),
-                        marginVertical: scale(5)
-                      }}>
-                        <Text semiBold numberOfLines={1} style={{ fontSize: scale(11), color: colors.white }}>Hoàn thành</Text>
-                      </View>
-                    </View>
-                    <Text numberOfLines={2} style={styles.textNormal}>{item?.introduce}</Text>
-                  </View>
-
+          
+            <View style={{ height: scale(80), borderWidth: 1, borderColor: colors.gray2x, flexDirection: 'row',justifyContent:'space-between' }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', flex: blBut ? 0.9 : 1 }}>
+                <View style={{ margin: scale(15),flex:1 }}>
+                  <Text semiBold style={{ fontSize: scale(20) }}>{item?.title}</Text>
+                  <Text style={{
+                    fontSize: scale(15),
+                    marginTop: scale(3),
+                    color: colors.gray
+                  }}>{item?.time}</Text>
                 </View>
-              </Button>
-            );
-          })}
-        </View>
-      </ScrollView>
+                <Text style={{
+                  margin: scale(15),
+                  fontSize: scale(15),
+                  textAlign:'right',
+                  marginTop:scale(30),
+                  color: item.id === 1 ? 'red' : colors.blue,
+                }}>{item?.text}</Text>
+              </View>
+              {/* {showButton &&(
+                        <View>
+                          <Button  onPress={(gotoDetail)}style={{width:scale(30),height:'50%',borderWidth:1}} 
+                          ><Text>asdv</Text></Button> 
+                          <Button  onPress={()=> setShowButton(false)}style={{width:scale(30),height:'50%',borderWidth:1}}
+                          ><Text>asdas</Text></Button> 
+                        </View>
+                      )} */}
+              {blBut &&
+                <View style={{ flex: 0.1,backgroundColor:colors.red }}>
+                  <View style={{
+                    alignItems: 'center',
+           
+                  }}>
+                    <Button style={{width:'100%',height:'50%',alignItems:'center',justifyContent:'center'}}
+                    onPress={gotoDetail}>
+                   
+                      <Image source={images.dots} style={{ width: scale(30), height: scale(30),tintColor:colors.white}}></Image></Button>
+                    <Button style={{width:'100%',height:'50%',alignItems:'center',justifyContent:'center'}}
+                    ><Image source={images.trash} style={{ width: scale(30), height: scale(30),tintColor:colors.white }}></Image></Button>
+                  </View>
+                </View>}
+            </View>
+          </View></Button> 
+           );
+            })}
+          </View>
+</ScrollView>
 
+
+
+              {/* <Button style={{with:scale(100),height:scale(25),borderRadius:scale(3),marginLeft:scale(5),backgroundColor:colors.green}}
+        onPress={TikTok}><Text>Online</Text></Button>
+        <Button style={{with:scale(100),height:scale(25),borderRadius:scale(3),marginLeft:scale(5),backgroundColor:colors.green}}
+        onPress={()=> setQR(true)}><Text>Offline</Text></Button> */}
+      {/* </KeyboardAwareScrollView>
+   }
+      {QR &&
+        <View style={{alignItems:'center',margin:scale(15)}}>
+        <Image source={images.QR} style={{width:scale(300),height:scale(300)}}></Image>
+      <Button style={{width:scale(220),height:scale(50),backgroundColor:colors.blue,borderRadius:scale(10),alignItems:'center',justifyContent: 'center',}}
+      onPress={()=>setQR(false)}>
+        <Text semiBold style={{fontSize:scale(20),color:colors.white}}>Quay về Danh sách</Text></Button>
+      </View>} */}
     </Layout >
   );
 }
@@ -220,34 +190,41 @@ function HomeScreen() {
 export default HomeScreen;
 
 const style = (theme: any) => StyleSheet.create({
-  btn: {
-    height: scale(48),
-    backgroundColor: colors.mainColor,
+  ImgUser: {
+    height: scale(30),
+    width: scale(30),
+    borderRadius: scale(25),
+
+  },
+  but: {
+    width: scale(75),
+    height: scale(50),
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: scale(8),
-    marginHorizontal: scale(20),
-    marginVertical: scale(20)
+    borderRightWidth: 1,
+    borderRightColor: colors.red
   },
-  btnRightIcon:{
+  btnRightIcon: {
     width: scale(30),
     height: scale(30),
     justifyContent: 'center',
     alignItems: 'center'
   },
-  icstore:{width: scale(30),
+  icstore: {
+    width: scale(30),
     height: scale(30),
-    resizeMode: 'contain',},
-  iconChangetheme:{
-        width: scale(20),
-        height: scale(20),
-        resizeMode: 'contain',
+    resizeMode: 'contain',
+  },
+  iconChangetheme: {
+    width: scale(20),
+    height: scale(20),
+    resizeMode: 'contain',
   },
   title: {
     fontSize: scale(20),
     textTransform: 'capitalize',
     color: theme.title,
-    
+
   },
   noDataContainer: {
     width: '100%',

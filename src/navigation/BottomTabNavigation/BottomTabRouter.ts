@@ -2,7 +2,7 @@ const BottomTabRouter = {
   HOME: 'HOME',
   SEARCH: 'SEARCH',
   LIBRARY: 'LIBRARY',
-  NOTIFICATION: 'NOTIFICATION',
+  CREATED: 'CREATED',
   WRITING: 'WRITING',
 };
 export default BottomTabRouter;

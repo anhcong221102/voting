@@ -25,6 +25,7 @@ import { scale } from 'device';
 type Props = {
   placeholder?: string;
   valueText?: string;
+  onDateChange?: number;
   onChangeText?: (text: string) => void;
   rightComponent?: any;
   secureTextEntry?: boolean;

@@ -6,3 +6,5 @@ export { default as ForgotPassScreen } from './authentication/ForgotPassScreen';
 export { default as SearchScreen } from './searchScreen/SearchScreen';
 export { default as LibraryScreen } from './libraryScreen/LibraryScreen';
 export { default as AboutNovelMoreScreen } from './mainScreen/AboutNovelMoreScreen';
+export { default as CreatedScreen } from './createdScreen/CreatedScreen';
+

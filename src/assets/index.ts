@@ -53,8 +53,12 @@ const images = {
   ggmeet:require('./images/ggmeet.png'),
   back:require('./images/back.png'),
   store:require('./images/store.png'),
-
-
+  gmeet:require('./images/gmeet.png'),
+  QR:require('./images/QR.png'),
+  Logo:require('./images/Logo.jpg'),
+  trash:require('./images/trash.png'),
+  checkbox:require('./images/checkbox.png'),
+  
   //slider
   slider00:require('./images/slider00.jpg'),
   slider01:require('./images/slider01.jpg'),
@@ -83,7 +87,15 @@ const colors = {
   textColor:'#0b0b0b',
   bgContainer:'rgba(13,214,184,0.2)',
   line:'rgba(13,214,184,0.2)',
-  Orange:'#FF0000'
+  Orange:'#FF0000',
+  human:'#FFCCCC',
+  Snow2:'# EEE9E9',
+  nen:'#EBDEDE',
+  gao:'#F0F0F0',
+  vien:'#977373',
+  text:'#343030',
+
+  
 };
 
 const fonts = {
