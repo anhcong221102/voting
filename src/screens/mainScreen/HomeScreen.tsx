@@ -42,7 +42,7 @@ function HomeScreen() {
     Linking.openURL('https://www.tiktok.com/@payxabengg');
 
   };
-
+const[current,setCurrent]=useState(-1);
 
   const A = 'A';
   const B = 'B';
@@ -118,7 +118,7 @@ function HomeScreen() {
                   <View>
           {hop?.map((item: any, index: number) => {
                 return (
-      <Button key={index} onPress={() => setblBut(!blBut)}>
+      <Button key={index} onPress={() => setCurrent(index)}>
         <View>
           
             <View style={{ height: scale(80), borderWidth: 1, borderColor: colors.gray2x, flexDirection: 'row',justifyContent:'space-between' }}>
@@ -147,7 +147,7 @@ function HomeScreen() {
                           ><Text>asdas</Text></Button> 
                         </View>
                       )} */}
-              {blBut &&
+              {current==index &&
                 <View style={{ flex: 0.1,backgroundColor:colors.red }}>
                   <View style={{
                     alignItems: 'center',

@@ -96,7 +96,8 @@ function DetailNovelScreen({ route }: Props) {
        loginAction({ userName: userName, pass: pass }),
      ); */
   };
-
+  
+ 
   return (
     <Layout bgColor={theme.type === 'light' ? colors.bgContent : colors.textColor}>
        <View style={{
@@ -119,6 +120,7 @@ function DetailNovelScreen({ route }: Props) {
         <View style={{ flexDirection: 'row', marginRight: scale(10) }}><Text style={{ marginRight: scale(10) }}>Nguyễn Văn A</Text>
           <Image source={images.img1} style={styles.ImgUser}></Image></View>
       </View>
+   
       <View style={{ paddingHorizontal: scale(30), marginTop: scale(50) }}>
       <CInput
         placeholder='Tên cuộc họp'

@@ -40,6 +40,7 @@ const CreatedScreen = () => {
   const [pinCode, setPinCode] = useState('');
   const [blSecurity, setBlSecurity] = useState(false);
   const isRefresh = useRef<boolean>(false);
+ 
   const [blViewSearch, setBlViewSearch] = useState(false);
   const [data, setData] = useState<any>([
     { id: 0, title: 'Bí ẩn', img: images.mystery },
@@ -87,25 +88,38 @@ const  [text,setText]=useState(false);
   return (
     <Layout bgColor={colors.white} barStyle={'dark-content'}>
      
-   <View style={{
-        marginTop: scale(15),
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderBottomColor: colors.line,
-        borderBottomWidth: scale(1),
-        paddingBottom: scale(15),
-        backgroundColor: colors.white
-      }}>
-     
-        <Image source={images.Logo} style={{ width: scale(130), height: scale(40) }}></Image>
-
-        <View style={{ flexDirection: 'row', marginRight: scale(10) }}><Text style={{ marginRight: scale(10) }}>Nguyễn Văn A</Text>
-          <Image source={images.img1} style={styles.ImgUser}></Image></View>
-      </View>
+  
       <ScrollView 
-              showsVerticalScrollIndicator={false}
-            >     
+              showsVerticalScrollIndicator={false}>     
+            <View style={{width:'100%',alignItems:'center',paddingTop:scale(20)}}>
+     <Button style={{width:scale(80),height:scale(80),borderColor:colors.gray,borderWidth:1,borderRadius:scale(50),alignItems:'center',justifyContent:'center'}}
+     ><Image source={images.upload}style={{width:scale(70),height:scale(70)}}></Image></Button>
+      </View>
+      
+      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Tên đại hội:</Text>
+      <CInput 
+        placeholder='Tên đại hội'
+        valueText={userName}
+        onChangeText={(text: string) => { setUserName(text) }}
+      />
+      </View>
+      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Tên tiêu đề:</Text>
+      <CInput 
+        placeholder='Tên tiêu đề'
+        valueText={userName}
+        onChangeText={(text: string) => { setUserName(text) }}
+      />
+      </View>
+      <View style={{flexDirection:'row'}}>
+      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Danh sách cổ đông:</Text>
+     <Button style={{width:scale(80),height:scale(80),borderWidth:1,borderColor:colors.gray,borderRadius:scale(10),alignItems:'center',justifyContent:'center'}}
+     ><Image source={images.uploadfile}style={{width:scale(70),height:scale(70)}}></Image></Button>
+      </View>
+      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Mẫu thư mời:</Text>
+     <Button style={{width:scale(80),height:scale(80),borderWidth:1,borderColor:colors.gray,borderRadius:scale(10),alignItems:'center',justifyContent:'center'}}
+     ><Image source={images.uploadfile}style={{width:scale(70),height:scale(70)}}></Image></Button>
+      </View>
+      </View>
       <View><Text style={styles.textTitle}>Hình thức cuộc họp</Text>
       <View style={{flexDirection:'row'}}>
       <View style={{flexDirection:'row'}}>
@@ -122,51 +136,36 @@ const  [text,setText]=useState(false);
       </View>
       
       </View>
-      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Tên đại hội:</Text>
-      <CInput 
-        placeholder='Tên đại hội'
-        valueText={userName}
-        onChangeText={(text: string) => { setUserName(text) }}
-      />
-      </View>
-      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Tên tiêu đề:</Text>
-      <CInput 
-        placeholder='Tên tiêu đề'
-        valueText={userName}
-        onChangeText={(text: string) => { setUserName(text) }}
-      />
-      </View>
-      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Logo:</Text>
-     <View style={styles.Brow}>
-      <Button style={styles.butt}
-      ><Text>Browse...</Text></Button>
-     </View>
-      </View>
-      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Danh sách cổ đông:</Text>
-     <View style={styles.Brow}>
-      <Button style={styles.butt}
-      ><Text>Browse...</Text></Button>
-     </View>
-      </View>
-      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Mẫu thư mời:</Text>
-     <View style={styles.Brow}>
-      <Button style={styles.butt}
-      ><Text>Browse...</Text></Button>
-     </View>
-      </View>
+      <View style={{flexDirection:'row'}}>
       <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Quy mô đại hội:</Text>
-     <View style={{ width:'50%',height:scale(50),
+     <View style={{ width:scale(160),height:text? scale(100):scale(50),
     borderWidth:1,borderRadius:scale(5),
     borderColor:colors.gray, justifyContent: 'space-between',flexDirection:'row',  alignItems: 'center', }}>
-      <View><Text style={{margin:scale(10)}}>10-50</Text>
-      {text && <Text style={{margin:scale(10)}}>50-100</Text>}
-      </View>
+      <Text style={{margin:scale(10)}}>10-50</Text>
+    
       <Button
       onPress={()=>setText(!text)}><Image source={images.ic_down} style={{ width: scale(16),
     height: scale(16),margin:scale(10),
     resizeMode: 'contain',
     tintColor: theme.title,}}></Image></Button>
      </View>
+      </View>
+      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Số ghế Offline:</Text>
+     <View style={{ width:scale(160),height:text? scale(100):scale(50),
+    borderWidth:1,borderRadius:scale(5),
+    borderColor:colors.gray, justifyContent: 'space-between',flexDirection:'row',  alignItems: 'center', }}>
+      <Text style={{margin:scale(10)}}>10-50</Text>
+    
+      <Button
+      onPress={()=>setText(!text)}><Image source={images.ic_down} style={{ width: scale(16),
+    height: scale(16),margin:scale(10),
+    resizeMode: 'contain',
+    tintColor: theme.title,}}></Image></Button>
+     </View>
+      </View></View>
+      <View style={{margin:scale(10)}}><Text style={styles.textTitle}>Danh sách câu hỏi:</Text>
+     <Button style={{width:scale(80),height:scale(80),borderWidth:1,borderColor:colors.gray,borderRadius:scale(10),alignItems:'center',justifyContent:'center'}}
+     ><Image source={images.uploadfile}style={{width:scale(70),height:scale(70)}}></Image></Button>
       </View>
       {/* <View style={{margin:scale(10)}}>
       <DropDownPicker
@@ -194,12 +193,12 @@ const  [text,setText]=useState(false);
     containerStyle={{height: 40}}
     onChangeItem={item => setSelectedValue(item.value)}
 /> */}
-       {/* <View>
+       <View style={{padding:scale(10)}}>
       <Text style={{fontSize:scale(17)}}>Thời gian diễn ra:</Text>
       <DatePicker 
         date={date}
       />
-    </View> */}
+    </View>
 </ScrollView>
       {isLoading && <Loading />}
 
@@ -295,7 +294,7 @@ const styles =   StyleSheet.create({
     fontSize: scale(14)
   },
   textTitle: {
-    fontSize:scale(20),margin:scale(10)
+    fontSize:scale(20),margin:scale(10),
   },
   textNormal: {
     fontSize: scale(12),

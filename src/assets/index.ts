@@ -58,7 +58,9 @@ const images = {
   Logo:require('./images/Logo.jpg'),
   trash:require('./images/trash.png'),
   checkbox:require('./images/checkbox.png'),
-  
+  upload:require('./images/upload.png'),
+  uploadfile:require('./images/uploadfile.png'),
+
   //slider
   slider00:require('./images/slider00.jpg'),
   slider01:require('./images/slider01.jpg'),
