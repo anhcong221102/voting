@@ -27,6 +27,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { JumpingTransition } from 'react-native-reanimated';
 import { createStackNavigator } from '@react-navigation/stack';
 import DetailNovelScreen from './DetailNovelScreen';
+import { TouchableNativeFeedback } from 'react-native-gesture-handler';
+import styles from 'css/styles';
 function HomeScreen() {
   const [isLoading, setLoading] = useState(false);
   const navigation = useNavigation();
@@ -37,12 +39,13 @@ function HomeScreen() {
   const { theme } = useContext(ThemeContext);
 
   const [blBut, setblBut] = useState(false);
+
   const TikTok = async () => {
 
     Linking.openURL('https://www.tiktok.com/@payxabengg');
 
   };
-const[current,setCurrent]=useState(-1);
+  const [current, setCurrent] = useState(-1);
 
   const A = 'A';
   const B = 'B';
@@ -52,28 +55,18 @@ const[current,setCurrent]=useState(-1);
   const [blPage, setblPage] = useState(A);
   const [QR, setQR] = useState(false);
 
-
   const styles = style(theme);
+
+  const [hop, setHop] = useState<any>([
+    { id: 0, title: 'Cuộc họp 1', text: 'Đã thanh toán', time: '10am, 30may' },
+    { id: 1, title: 'Cuộc họp 2', text: 'Chưa thanh toán', time: '10am, 30may' },
+    { id: 1, title: 'Cuộc họp 3', text: 'Chưa thanh toán', time: '10am, 30may' },
+    { id: 0, title: 'Cuộc họp 4', text: 'Đã thanh toán', time: '10am, 30may' },
+  ])
+
   useEffect(() => {
 
   }, []);
-  useEffect(() => {
-    if (isRefresh.current) {
-      isRefresh.current = false;
-
-    }
-  }, [data]);
-
-  const [hop, setHop] = useState<any>([  
-    { id: 0, title: 'Cuộc họp 1', text:'Đã thanh toán',time:'10am, 30may' },
-    { id: 1, title: 'Cuộc họp 2', text:'Chưa thanh toán',time:'10am, 30may' },
-    { id: 1, title: 'Cuộc họp 3', text:'Chưa thanh toán',time:'10am, 30may' },
-    { id: 0, title: 'Cuộc họp 4', text:'Đã thanh toán' ,time:'10am, 30may'},
-  ])
-  
-  useEffect(() => {
-   
-  }, []); 
 
   const Stack = createStackNavigator();
   const [showButton, setShowButton] = useState(false);
@@ -82,11 +75,7 @@ const[current,setCurrent]=useState(-1);
   const gotoDetail = (item: any) => {
     navigate(MainStackRouter.DETAILNOVEL, { item: item })
   }
-  const _renderEmpty = () => {
-    return <View style={styles.noDataContainer}>
-      <Text style={styles.txtNoData}>No Data</Text>
-    </View>
-  }
+
 
   return (
     <Layout>
@@ -100,46 +89,50 @@ const[current,setCurrent]=useState(-1);
         paddingBottom: scale(15),
         backgroundColor: colors.white
       }}>
-     
-        <Image source={images.Logo} style={{ width: scale(130), height: scale(40) }}></Image>
 
-        <View style={{ flexDirection: 'row', marginRight: scale(10) }}><Text style={{ marginRight: scale(10) }}>Nguyễn Văn A</Text>
+        <Image source={images.Logo} style={{
+          width: scale(130),
+          height: scale(40)
+        }}></Image>
+
+        <View style={{
+          flexDirection: 'row',
+          marginRight: scale(10)
+        }}>
+          <Text style={{ marginRight: scale(10) }}>Nguyễn Văn A</Text>
           <Image source={images.img1} style={styles.ImgUser}></Image></View>
       </View>
-     
+
       {/* {!QR &&
          <KeyboardAwareScrollView
          bounces={false}
          showsVerticalScrollIndicator={false}
          contentContainerStyle={{ flex: 1 }}> */}
-          <ScrollView 
-              showsVerticalScrollIndicator={false}
-            >     
-                  <View>
-          {hop?.map((item: any, index: number) => {
-                return (
-      <Button key={index} onPress={() => setCurrent(index)}>
-        <View>
-          
-            <View style={{ height: scale(80), borderWidth: 1, borderColor: colors.gray2x, flexDirection: 'row',justifyContent:'space-between' }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', flex: blBut ? 0.9 : 1 }}>
-                <View style={{ margin: scale(15),flex:1 }}>
-                  <Text semiBold style={{ fontSize: scale(20) }}>{item?.title}</Text>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
+
+        {hop?.map((item: any, index: number) => {
+          return (
+            <Button key={index} onPress={() => setblBut(!blBut)}>
+              <View style={{ height: scale(80), borderWidth: 1, borderColor: colors.gray2x, flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', flex: blBut ? 0.9 : 1 }}>
+                  <View style={{ margin: scale(15), flex: 1 }}>
+                    <Text semiBold style={{ fontSize: scale(20) }}>{item?.title}</Text>
+                    <Text style={{
+                      fontSize: scale(15),
+                      marginTop: scale(3),
+                      color: colors.gray
+                    }}>{item?.time}</Text>
+                  </View>
                   <Text style={{
+                    marginRight: scale(20),
                     fontSize: scale(15),
-                    marginTop: scale(3),
-                    color: colors.gray
-                  }}>{item?.time}</Text>
+                    textAlign: 'right',
+                    color: item.id === 1 ? 'red' : colors.blue,
+                  }}>{item?.text}</Text>
                 </View>
-                <Text style={{
-                  margin: scale(15),
-                  fontSize: scale(15),
-                  textAlign:'right',
-                  marginTop:scale(30),
-                  color: item.id === 1 ? 'red' : colors.blue,
-                }}>{item?.text}</Text>
-              </View>
-              {/* {showButton &&(
+                {/* {showButton &&(
                         <View>
                           <Button  onPress={(gotoDetail)}style={{width:scale(30),height:'50%',borderWidth:1}} 
                           ><Text>asdv</Text></Button> 
@@ -147,45 +140,57 @@ const[current,setCurrent]=useState(-1);
                           ><Text>asdas</Text></Button> 
                         </View>
                       )} */}
-              {current==index &&
-                <View style={{ flex: 0.1,backgroundColor:colors.red }}>
-                  <View style={{
-                    alignItems: 'center',
-           
-                  }}>
-                    <Button style={{width:'100%',height:'50%',alignItems:'center',justifyContent:'center'}}
-                    onPress={gotoDetail}>
-                   
-                      <Image source={images.dots} style={{ width: scale(30), height: scale(30),tintColor:colors.white}}></Image></Button>
-                    <Button style={{width:'100%',height:'50%',alignItems:'center',justifyContent:'center'}}
-                    ><Image source={images.trash} style={{ width: scale(30), height: scale(30),tintColor:colors.white }}></Image></Button>
-                  </View>
-                </View>}
-            </View>
-          </View></Button> 
-           );
-            })}
-          </View>
-</ScrollView>
+                {blBut &&
+                  <View style={{ flex: 0.1, backgroundColor: colors.red }}>
+                    <Button style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: colors.textColor,
+                      width: '100%',
+                      flex: 1
+                    }}
+                      onPress={gotoDetail}>
 
-
-
-              {/* <Button style={{with:scale(100),height:scale(25),borderRadius:scale(3),marginLeft:scale(5),backgroundColor:colors.green}}
-        onPress={TikTok}><Text>Online</Text></Button>
-        <Button style={{with:scale(100),height:scale(25),borderRadius:scale(3),marginLeft:scale(5),backgroundColor:colors.green}}
-        onPress={()=> setQR(true)}><Text>Offline</Text></Button> */}
+                      <Image source={images.dots}
+                        style={{
+                          width: scale(20),
+                          height: scale(20),
+                          tintColor: colors.white
+                        }}></Image></Button>
+                    <Button style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: colors.mainColor,
+                      width: '100%',
+                      flex: 1
+                    }}
+                    ><Image source={images.trash}
+                      style={{
+                        width: scale(20),
+                        height: scale(20),
+                        tintColor: colors.white
+                      }}></Image></Button>
+                  </View>}
+              </View></Button>
+          );
+        })}
+      </ScrollView>
+      {/* <Button style={{with:scale(100),height:scale(25),borderRadius:scale(3),marginLeft:scale(5),backgroundColor:colors.green}}
+            onPress={TikTok}><Text>Online</Text></Button>
+            <Button style={{with:scale(100),height:scale(25),borderRadius:scale(3),marginLeft:scale(5),backgroundColor:colors.green}}
+            onPress={()=> setQR(true)}><Text>Offline</Text></Button> */}
       {/* </KeyboardAwareScrollView>
-   }
-      {QR &&
-        <View style={{alignItems:'center',margin:scale(15)}}>
-        <Image source={images.QR} style={{width:scale(300),height:scale(300)}}></Image>
-      <Button style={{width:scale(220),height:scale(50),backgroundColor:colors.blue,borderRadius:scale(10),alignItems:'center',justifyContent: 'center',}}
-      onPress={()=>setQR(false)}>
-        <Text semiBold style={{fontSize:scale(20),color:colors.white}}>Quay về Danh sách</Text></Button>
-      </View>} */}
+      }
+          {QR &&
+            <View style={{alignItems:'center',margin:scale(15)}}>
+            <Image source={images.QR} style={{width:scale(300),height:scale(300)}}></Image>
+          <Button style={{width:scale(220),height:scale(50),backgroundColor:colors.blue,borderRadius:scale(10),alignItems:'center',justifyContent: 'center',}}
+          onPress={()=>setQR(false)}>
+            <Text semiBold style={{fontSize:scale(20),color:colors.white}}>Quay về Danh sách</Text></Button>
+          </View>} */}
     </Layout >
   );
-}
+};
 
 export default HomeScreen;
 

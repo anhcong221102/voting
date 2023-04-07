@@ -77,7 +77,7 @@ const images = {
 };
 
 const colors = {
-  mainColor:'#0DD6B8',
+  mainColor:'#CE061F',
   white:'#FFFFFF',
   black:'#000000',
   red:'#f00000',
@@ -88,7 +88,7 @@ const colors = {
   bgContent:'#f7f8f8',
   textColor:'#0b0b0b',
   bgContainer:'rgba(13,214,184,0.2)',
-  line:'rgba(13,214,184,0.2)',
+  line:'rgba(0,0,0,0.05)',
   Orange:'#FF0000',
   human:'#FFCCCC',
   Snow2:'# EEE9E9',
